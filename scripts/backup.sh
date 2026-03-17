@@ -1,2 +1,11 @@
 #!/bin/bash
-rsync --archive --human-readable --verbose /home/kdi/Documents /home/kdi/Pictures /home/kdi/Videos /home/kdi/Music /run/media/kdi/backup
+
+video_dir="${HOME}/Videos/"
+if [[ "${OSTYPE}" == "darwin"* ]]; then
+    video_dir="${HOME}/Movies/"
+fi
+
+rsync -ahv ${HOME}/Documents/ /Volumes/BACKUP/Documents/
+rsync -ahv ${HOME}/Music/     /Volumes/BACKUP/Music/
+rsync -ahv ${HOME}/Pictures/  /Volumes/BACKUP/Pictures/
+rsync -ahv ${video_dir}       /Volumes/BACKUP/Videos/
