@@ -27,15 +27,26 @@ vim.cmd.colorscheme('default')
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {})
 vim.keymap.set("n", "<Space>e", ":Oil<CR>")
 vim.keymap.set("n", "<Space>p", ":find ")
-vim.keymap.set("n", "<Space>f", ":silent grep! -s ")
-vim.keymap.set("n", "<Space>F", ":silent grep! -s -v ")
+vim.keymap.set("n", "<Space>f", ":silent lgrep! -soE ")
+vim.keymap.set("n", "<Space>F", ":silent lgrep! -soE -v ")
 vim.keymap.set("n", "<Space>b", ":ls<CR>:b ")
 vim.keymap.set("n", "<Space>co", ":bo copen<CR>")
 vim.keymap.set("n", "<Space>cc", ":cclose<CR>")
 vim.keymap.set("n", "]c", ":cnext<CR>")
 vim.keymap.set("n", "[c", ":cprevious<CR>")
-vim.keymap.set("n", "<Space>lo", ":lopen<CR>")
-vim.keymap.set("n", "<Space>lc", ":lclose<CR>")
+
+vim.keymap.set('n', '<C-w><Space>', function()
+  local loclist_winid = vim.fn.getloclist(0, { winid = 0 }).winid
+
+  if loclist_winid ~= 0 then
+    vim.cmd("lclose")
+  else
+    local status, _ = pcall(vim.cmd, "lopen")
+    if not status then
+      print("Location list is empty")
+    end
+  end
+end)
 
 -- autocmd
 vim.api.nvim_create_autocmd('FileType', {
