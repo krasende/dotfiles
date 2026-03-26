@@ -22,12 +22,16 @@ if [[ ! ${url} ]]; then
 fi
 
 if [[ "$(uname)" == "Darwin" ]]; then
-  open -a "Safari" "${url}" || echo "${url}"
-else
-  echo "${url}"
+  open -a "Safari" "${url}"
 fi
 
-echo "0. Copy the 'data:text/html;base64,*' string above and paste it into a browser" 
+if [[ ${?} != 0 || "$(uname)" != "Darwin" ]]; then
+  echo "---"
+  echo "${url}"
+  echo "---"
+  echo "0. Copy the 'data:text/html;base64,*' string above and paste it into a browser" 
+fi
+
 echo "1. Complete 2FA authentication in the browser" 
 echo "2. Inspect source of 'Login Successful!' page"
 echo "3. Copy the contents of <prelogin-cookie> element"
