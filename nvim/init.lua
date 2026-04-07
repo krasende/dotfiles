@@ -17,6 +17,7 @@ vim.opt.mousemodel = "extend"
 vim.opt.scrolloff = 1
 vim.opt.path:append("**/*")
 vim.opt.winborder = "rounded"
+vim.opt.pumborder = "rounded"
 vim.opt.completeopt = { "menuone", "noselect", "fuzzy" }
 vim.opt.listchars = { tab = "<>", space = "_", eol = "$" }
 vim.opt.statusline = "%!v:lua.StatusLine()"
@@ -87,20 +88,19 @@ vim.api.nvim_create_autocmd('DiagnosticChanged', {
   end
 })
 
-
 -- user commands
 vim.api.nvim_create_user_command('Blame', function()
-    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
 
-    local bufnr = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_buf_set_option(bufnr, 'filetype', vim.bo.filetype)
-    vim.api.nvim_buf_set_option(bufnr, 'bufhidden', 'wipe')
+  local bufnr = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_option(bufnr, 'filetype', vim.bo.filetype)
+  vim.api.nvim_buf_set_option(bufnr, 'bufhidden', 'wipe')
 
-    vim.api.nvim_set_current_buf(bufnr)
+  vim.api.nvim_set_current_buf(bufnr)
 
-    vim.cmd("0r !git blame #");
+  vim.cmd("0r !git blame #");
 
-    vim.api.nvim_win_set_cursor(0, {row, col})
+  vim.api.nvim_win_set_cursor(0, {row, col})
 end, {})
 
 vim.api.nvim_create_user_command('Open', function(opts)
@@ -133,27 +133,20 @@ vim.lsp.config.tsls = {
 
 vim.lsp.enable({ "gopls", "tsls" })
 
--- statusline
+-- functions
 function StatusLine()
-  local bufid = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
-  local clients = vim.lsp.get_clients({ bufnr = bufid })
   local diagnostics = "" 
-
-  if #clients > 0 then
-    local dc = vim.diagnostic.count(bufid)
-    if next(dc) ~= nil then
-      local s = vim.diagnostic.severity
-      diagnostics = string.format("%s%s%s%s",
-        dc[s.ERROR] and "%#DiagnosticError#" .. dc[s.ERROR] .. "E%* " or "",
-        dc[s.WARN] and "%#DiagnosticWarn#" .. dc[s.WARN] .. "W%* " or "",
-        dc[s.INFO] and "%#DiagnosticInfo#" .. dc[s.INFO] .. "I%* " or "",
-        dc[s.HINT] and "%#DiagnosticHint#" .. dc[s.HINT] .. "H%* " or ""
-      )
-    end
+  if next(vim.diagnostic.count()) then
+    diagnostics = vim.diagnostic.status() .. ' '
   end
-
   return "%f%h%w%m%r%="..diagnostics.."%l,%c/%L"
 end
+
+-- plugins
+vim.pack.add({
+  "https://github.com/nvim-treesitter/nvim-treesitter.git",
+  "https://github.com/stevearc/oil.nvim.git",
+})
 
 require("oil").setup({
   view_options = {
