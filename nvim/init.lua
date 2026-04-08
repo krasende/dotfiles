@@ -52,9 +52,10 @@ end)
 -- autocmd
 vim.api.nvim_create_autocmd('FileType', {
   pattern = {
-    "sh", "go", "typescript", "javascript",
-    "css", "scss", "html", "htmlangular",
-    "json", "yaml", "markdown", "markdown_inline",
+    "sh", "go", "typescript", 
+    "css", "scss", 
+    "html", "htmlangular",
+    "yaml",
   },
   callback = function() 
     vim.treesitter.start() 
@@ -146,6 +147,13 @@ end
 vim.pack.add({
   "https://github.com/nvim-treesitter/nvim-treesitter.git",
   "https://github.com/stevearc/oil.nvim.git",
+})
+
+require("nvim-treesitter").install({ 
+  "bash", "go", "typescript",
+  "css", "scss",
+  "html", "angular",
+  "yaml"
 })
 
 require("oil").setup({
