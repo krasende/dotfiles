@@ -26,14 +26,12 @@ vim.cmd.colorscheme('default')
 
 -- keymaps
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", {})
+vim.keymap.set("n", "<C-w>c", ":bo copen<CR>")
 vim.keymap.set("n", "<Space>e", ":Oil<CR>")
 vim.keymap.set("n", "<Space>p", ":find ")
 vim.keymap.set("n", "<Space>f", ":vimgrep ")
 vim.keymap.set("n", "<Space>F", ":silent grep! -soE ")
 vim.keymap.set("n", "<Space>b", ":ls<CR>:b ")
-vim.keymap.set("n", "<C-w>c", ":bo copen<CR>")
-vim.keymap.set("n", "]c", ":cnext<CR>")
-vim.keymap.set("n", "[c", ":cprevious<CR>")
 
 -- autocmd
 vim.api.nvim_create_autocmd('FileType', {
